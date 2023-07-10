@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <h1>Blackjack</h1>
+    <div class="messages"></div>
+    <div class="player">
+        <div class="player-credits"></div>
+        <div class="buttons">
+            <button class="deal hidden js-deal">Deal</button>
+            <!--//kérek kártyát-->
+            <button class="hit hidden js-hit">Hit</button>
+            <!--nem érek kártáyát-->
+            <button class="stand hidden js-stand">Stand</button>
+            <!--//két egyforma kártyánál jelenik meg-->
+            <button class="split hidden js-split">Split</button>
+            <!--ha az osztónak látszik egy ásza ilyenkor lefelezhető a BET ha az osztónál blackjack van -->
+            <button class="insure hidden js-insure">Insure</button>
+        </div>
+
+    </div>
+    <div class="desk">
+        <div class="bets"></div>
+        <div class="player-cards"></div>
+        <div class="computer-cards"></div>
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
+</html>
