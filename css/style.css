@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 body {
@@ -9,7 +10,79 @@ body {
     color:lightgoldenrodyellow;
 }
 
-.hidden{
-    display: none;
+h1{
+    text-align: center;
 }
 
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.disable-pointer-events {
+    pointer-events: none;
+}
+
+.messages-container {
+    text-align: center;
+    font-size: 24px;
+
+}
+.playerCoins-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 50px;
+}
+.coin-1, .coin-10, .coin-100, .coin-500 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 20px
+    
+}
+
+.coin-1 {
+    background-color: white;
+    color: black;
+    border: 8px solid rgb(126, 156, 240);
+}
+
+.coin-10 {
+    background-color: white;
+    color: black;
+    border: 8px dashed rgb(184, 192, 214);
+}
+
+.coin-100 {
+    background-color: white;
+    color: black;
+    border: 8px solid rgb(121, 202, 161);
+}
+
+.coin-500 {
+    background-color: white;
+    color: black;
+    border: 8px dashed rgb(47, 48, 49);
+}
+
+.player-cards-container,
+.computer-cards-container {
+    display: flex;
+    justify-content: center;
+}
+
+.player-cards-container img,
+.computer-cards-container img {
+    width: 150px;
+    padding: 10px;
+}

@@ -8,10 +8,13 @@
 </head>
 <body>
     <h1>Blackjack</h1>
-    <div class="messages"></div>
+    
+    <div class="messages-container js-messages-container">Start the game with "New Game" button!</div>
     <div class="player">
         <div class="player-credits"></div>
         <div class="buttons">
+            <button class="new-game js-new-game">New Game</button>
+            <!--Ha kész vagyok a tétekkel-->
             <button class="deal hidden js-deal">Deal</button>
             <!--//kérek kártyát-->
             <button class="hit hidden js-hit">Hit</button>
@@ -22,14 +25,19 @@
             <!--ha az osztónak látszik egy ásza ilyenkor lefelezhető a BET ha az osztónál blackjack van -->
             <button class="insure hidden js-insure">Insure</button>
         </div>
-
     </div>
     <div class="desk">
-        <div class="bets"></div>
-        <div class="player-cards"></div>
-        <div class="computer-cards"></div>
+        <div class="pot js-pot"></div>
+        <div class="playerChips-container js-playerChips-container"></div>
+        <div class="playerCoins-container js-playerCoins-container">
+            <div class="coin-1 js-coin-1 hidden">1</div>
+            <div class="coin-10 js-coin-10 hidden">10</div>
+            <div class="coin-100 js-coin-100 hidden">100</div>
+            <div class="coin-500 js-coin-500 hidden" >500</div>
+        </div>
+        <div class="player-cards-container js-player-cards-container"></div>
+        <div class="computer-cards-container js-computer-cards-container"></div>
     </div>
-
     <script src="./js/main.js"></script>
 </body>
 </html>
