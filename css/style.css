@@ -77,6 +77,8 @@ button {
 
 .player-cards-container,
 .computer-cards-container {
+    position: relative;
+    left: 60px;
     display: flex;
     justify-content: center;
 }
@@ -84,5 +86,7 @@ button {
 .player-cards-container img,
 .computer-cards-container img {
     width: 150px;
-    padding: 10px;
+    padding: 10px 10px 10px 0;
+    margin-left: -100px;
+
 }

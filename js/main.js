@@ -10,12 +10,14 @@ const coin100Button = document.querySelector(".js-coin-100");
 const coin500Button = document.querySelector(".js-coin-500");
 
 const newGameButton = document.querySelector(".js-new-game");
+const newHandButton = document.querySelector(".js-new-hand");
 const dealButton = document.querySelector(".js-deal");
 const hitButton = document.querySelector(".js-hit");
 const standButton = document.querySelector(".js-stand");
 
 
 newGameButton.addEventListener("click", newGame);
+newHandButton.addEventListener("click", newHand);
 coin1Button.addEventListener("click", (e) => {
     pot += 1;
     playerChips -= 1;
@@ -41,6 +43,9 @@ dealButton.addEventListener("click", () => {
     message = "You can HIT or STAND."
 });
 
+standButton.addEventListener("click", handleStand)
+hitButton.addEventListener("click", handleHit)
+
 //program állapot
 let deckId = null;
 let playerCards = [];
@@ -50,10 +55,10 @@ let pot = 0;
 let message;
 let firstDrawState;
 
-function initialize(){
+function initialize(playerChipsSum){
     deckId = null;
     playerCards = [];
-    playerChips = 2500;
+    playerChips = playerChipsSum;
     computerCards = [];
     pot = 0;
     message ="Place Your Bets and push DEAL button!"
@@ -89,10 +94,8 @@ function render() {
     renderButtons();
 }
 
-
 function renderMessages() {
-    messagesContainer.innerHTML = `${message}`;
-   
+    messagesContainer.innerHTML = `${message}`;  
 }
 
 function renderButtons() {
@@ -105,6 +108,8 @@ function renderButtons() {
         hitButton.classList.add("hidden");
         standButton.classList.add("hidden");
     }
+    if (pot === 0 && computerCards.length != 0) newHandButton.classList.remove("hidden");
+        else newHandButton.classList.add("hidden")
 }
 
 function renderPlayerChips() {
@@ -167,21 +172,70 @@ function renderComputerCards() {
 
 function sumCardsValues(cards) {
     let cardsSum = 0;
+    let numberOfAce = 0;
     for (let card of cards) {
         if (card.code[0] === "A") {
             cardsSum += 11;
+            numberOfAce += 1;
         } else {
         cardsSum += 
             card.code[0] === "0" | 
             card.code[0] === "J" | 
             card.code[0] === "Q" | 
-            card.code[0] === "K" |
-            card.code[0] === "A" ? 10 : Number(card.code[0]);
+            card.code[0] === "K" ? 10 : Number(card.code[0]);
         }
     }
+    if (cardsSum > 21 && numberOfAce > 0) cardsSum -= numberOfAce*10;
     return cardsSum
 }
 
+// handle függvények
+
+async function handleStand() {
+    firstDrawState = false;
+    while ( (sumCardsValues(computerCards.cards) < 17 && 
+            sumCardsValues(playerCards.cards) > sumCardsValues(computerCards.cards)) ||
+            (sumCardsValues(playerCards.cards) > sumCardsValues(computerCards.cards))||
+            (sumCardsValues(playerCards.cards) === sumCardsValues(computerCards.cards) &&
+            sumCardsValues(computerCards.cards) < 17) ){
+        let dealerCards = await drawCards(deckId, 1);
+        computerCards.cards.push(dealerCards.cards[0])
+        render();
+    }
+    decideWhoIsTheWin()
+}
+
+function decideWhoIsTheWin() {
+    if (sumCardsValues(playerCards.cards) > 21 || 
+        (sumCardsValues(computerCards.cards) > sumCardsValues(playerCards.cards) && 
+        sumCardsValues(computerCards.cards) < 22)) {
+            message = "Dealer Wins";
+            pot = 0;
+    } else if (sumCardsValues(computerCards.cards) > 21 || 
+               sumCardsValues(computerCards.cards) < sumCardsValues(playerCards.cards)) {
+            message = `You Win ${pot}$`;
+            playerChips += pot * 2;
+            pot = 0;
+    } else {
+        message = "Push";
+        playerChips += pot;
+        pot = 0;
+    }
+    if (pot = 0) newHandButton.classList.remove("hidden");
+    render()
+}
+
+async function handleHit(){
+    firstDrawState = true;
+    let dealerCards = await drawCards(deckId, 1);
+    playerCards.cards.push(dealerCards.cards[0]);
+    render();
+    if (sumCardsValues(playerCards.cards) > 21) decideWhoIsTheWin();  
+}
+
+function newHand(){
+    initialize(playerChips);
+}
 function newGame() {
-    initialize();
+    initialize(2500);
 }
