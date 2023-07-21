@@ -1,8 +1,10 @@
 const playerCardsContainer = document.querySelector(".js-player-cards-container");
-const computerCardsContainer = document.querySelector(".js-computer-cards-container");
+const dealerCardsContainer = document.querySelector(".js-dealer-cards-container");
 const messagesContainer = document.querySelector(".js-messages-container");
-const playerChipsContainer = document.querySelector(".js-playerChips-container");
+const playerChipsContainer = document.querySelector(".js-player-chips-container");
 const potContainer = document.querySelector(".js-pot");
+const playerCardsSum = document.querySelector(".js-player-cards-sum");
+const dealerCardsSum = document.querySelector(".js-dealer-cards-sum");
 
 const coin1Button = document.querySelector(".js-coin-1");
 const coin10Button = document.querySelector(".js-coin-10");
@@ -14,6 +16,7 @@ const newHandButton = document.querySelector(".js-new-hand");
 const dealButton = document.querySelector(".js-deal");
 const hitButton = document.querySelector(".js-hit");
 const standButton = document.querySelector(".js-stand");
+const doubleButton = document.querySelector(".js-double");
 
 
 newGameButton.addEventListener("click", newGame);
@@ -43,14 +46,15 @@ dealButton.addEventListener("click", () => {
     message = "You can HIT or STAND."
 });
 
-standButton.addEventListener("click", handleStand)
 hitButton.addEventListener("click", handleHit)
+standButton.addEventListener("click", handleStand)
+doubleButton.addEventListener("click", handleDouble)
 
 //program állapot
 let deckId = null;
-let playerCards = [];
+let playerCards;
 let playerChips = 2500;
-let computerCards = [];
+let dealerCards;
 let pot = 0;
 let message;
 let firstDrawState;
@@ -59,7 +63,7 @@ function initialize(playerChipsSum){
     deckId = null;
     playerCards = [];
     playerChips = playerChipsSum;
-    computerCards = [];
+    dealerCards = [];
     pot = 0;
     message ="Place Your Bets and push DEAL button!"
     firstDrawState = true;
@@ -72,7 +76,9 @@ async function newDeck() {
     const response = await data.json();
     deckId = response.deck_id;
     playerCards = await drawCards(deckId, 2);
-    computerCards = await drawCards(deckId, 2);
+    playerCards = playerCards.cards;
+    dealerCards = await drawCards(deckId, 2);
+    dealerCards = dealerCards.cards;
     render();
 }
 
@@ -89,7 +95,7 @@ function render() {
     renderMessages();
     renderPlayerChips();
     renderPlayerCards();
-    renderComputerCards();
+    renderDealerCards();
     renderPot();
     renderButtons();
 }
@@ -99,16 +105,18 @@ function renderMessages() {
 }
 
 function renderButtons() {
-    if (pot > 0 && computerCards.length === 0) dealButton.classList.remove("hidden");
+    if (pot > 0 && dealerCards.length === 0) dealButton.classList.remove("hidden");
         else dealButton.classList.add("hidden")
-    if (pot > 0 && computerCards.length != 0) {
+    if (pot > 0 && dealerCards.length != 0) {
         hitButton.classList.remove("hidden");
         standButton.classList.remove("hidden");
     }   else {
         hitButton.classList.add("hidden");
         standButton.classList.add("hidden");
     }
-    if (pot === 0 && computerCards.length != 0) newHandButton.classList.remove("hidden");
+    if (pot > 0 && playerCards.length === 2 && pot <= playerChips) doubleButton.classList.remove("hidden");
+        else doubleButton.classList.add("hidden");
+    if (pot === 0 && dealerCards.length != 0 && playerChips > 0) newHandButton.classList.remove("hidden");
         else newHandButton.classList.add("hidden")
 }
 
@@ -121,7 +129,7 @@ function renderPlayerChips() {
         else coin100Button.classList.add("hidden");
     if (playerChips / 500 >= 1) coin500Button.classList.remove("hidden");
         else coin500Button.classList.add("hidden");
-    playerChipsContainer.innerHTML = `<p>${playerChips}$</p>`;
+    playerChipsContainer.innerHTML = `<p>You have: ${playerChips}$</p>`;
     if (playerCards.length != 0) {
         coin1Button.classList.add("disable-pointer-events");
         coin10Button.classList.add("disable-pointer-events");
@@ -138,26 +146,26 @@ function renderPlayerChips() {
 function renderPot() {
     if (pot > 0) {
         potContainer.innerHTML = `<p>${pot}$</p>`;
-    } else potContainer.innerHTML = "";
+    } else potContainer.innerHTML = "0$";
 }
 
 function renderPlayerCards() {
-    let html = '';
+    let html = "";
     if (playerCards.length != 0) {
-        for (let card of playerCards.cards) {
+        for (let card of playerCards) {
             html += `<img src="${card.image}" alt="${card.code}" />`;
             }
-        html += `<p>${sumCardsValues(playerCards.cards)}</p>`
+        playerCardsSum.innerHTML = `Your cards: ${sumCardsValues(playerCards)}`
         playerCardsContainer.innerHTML = html;
     } else playerCardsContainer.innerHTML = "";
 }
 
-function renderComputerCards() {
+function renderDealerCards() {
     let html = '';
-    if (computerCards.length != 0) {
-        for (let cardIndex in computerCards.cards) {
-            let cardImage = computerCards.cards[cardIndex].image;
-            let cardAlt = computerCards.cards[cardIndex].code;
+    if (dealerCards.length != 0) {
+        for (let cardIndex in dealerCards) {
+            let cardImage = dealerCards[cardIndex].image;
+            let cardAlt = dealerCards[cardIndex].code;
             if (firstDrawState) {
                 cardImage = 'https://www.deckofcardsapi.com/static/img/back.png';
                 cardAlt = 'Back of Card'
@@ -165,9 +173,9 @@ function renderComputerCards() {
             }
             html += `<img src="${cardImage}" alt="${cardAlt}" />`;
         }
-        html += `<p>${sumCardsValues(computerCards.cards)}</p>`
-        computerCardsContainer.innerHTML = html;
-    }  else computerCardsContainer.innerHTML = "";
+        dealerCardsSum.innerHTML = `Dealer cards: ${sumCardsValues(dealerCards)}`
+        dealerCardsContainer.innerHTML = html;
+    }  else dealerCardsContainer.innerHTML = "";
 }
 
 function sumCardsValues(cards) {
@@ -185,7 +193,10 @@ function sumCardsValues(cards) {
             card.code[0] === "K" ? 10 : Number(card.code[0]);
         }
     }
-    if (cardsSum > 21 && numberOfAce > 0) cardsSum -= numberOfAce*10;
+    while (numberOfAce > 0 && cardsSum > 21) {
+        cardsSum -= 10;
+        numberOfAce -= 1        
+    }
     return cardsSum
 }
 
@@ -193,29 +204,47 @@ function sumCardsValues(cards) {
 
 async function handleStand() {
     firstDrawState = false;
-    while ( (sumCardsValues(computerCards.cards) < 17 && 
-            sumCardsValues(playerCards.cards) > sumCardsValues(computerCards.cards)) ||
-            (sumCardsValues(playerCards.cards) > sumCardsValues(computerCards.cards))||
-            (sumCardsValues(playerCards.cards) === sumCardsValues(computerCards.cards) &&
-            sumCardsValues(computerCards.cards) < 17) ){
-        let dealerCards = await drawCards(deckId, 1);
-        computerCards.cards.push(dealerCards.cards[0])
+    while ( (sumCardsValues(dealerCards) < 17 && 
+            sumCardsValues(playerCards) > sumCardsValues(dealerCards)) ||
+            (sumCardsValues(playerCards) === sumCardsValues(dealerCards) &&
+            sumCardsValues(dealerCards) < 17) ){
+        let temp = await drawCards(deckId, 1);
+        temp = temp.cards;
+        dealerCards.push(temp[0])
         render();
     }
-    decideWhoIsTheWin()
+    decideWhoIsTheWin();
+}
+
+async function handleDouble() {
+    playerChips -= pot;
+    pot += pot;
+    await handleHit();
+    if (sumCardsValues(playerCards) < 22) handleStand(); // ez itt nem jó előbb lefut mielőtt megjönne a kártya?
+}
+
+async function handleHit(){
+    firstDrawState = true;
+    let temp = await drawCards(deckId, 1);
+    temp = temp.cards;
+    playerCards.push(temp[0]);
+    render();
+    if (sumCardsValues(playerCards) > 21) decideWhoIsTheWin();
 }
 
 function decideWhoIsTheWin() {
-    if (sumCardsValues(playerCards.cards) > 21 || 
-        (sumCardsValues(computerCards.cards) > sumCardsValues(playerCards.cards) && 
-        sumCardsValues(computerCards.cards) < 22)) {
+    if (sumCardsValues(playerCards) > 21 || 
+        (sumCardsValues(dealerCards) > sumCardsValues(playerCards) && 
+        sumCardsValues(dealerCards) < 22)) {
             message = "Dealer Wins";
             pot = 0;
-    } else if (sumCardsValues(computerCards.cards) > 21 || 
-               sumCardsValues(computerCards.cards) < sumCardsValues(playerCards.cards)) {
+    } else if (sumCardsValues(dealerCards) > 21 || 
+               sumCardsValues(dealerCards) < sumCardsValues(playerCards)) {
             message = `You Win ${pot}$`;
-            playerChips += pot * 2;
+            if (playerCards.length === 2) playerChips += pot + (pot * 1.5);
+                else playerChips += pot * 2;
             pot = 0;
+
     } else {
         message = "Push";
         playerChips += pot;
@@ -223,14 +252,6 @@ function decideWhoIsTheWin() {
     }
     if (pot = 0) newHandButton.classList.remove("hidden");
     render()
-}
-
-async function handleHit(){
-    firstDrawState = true;
-    let dealerCards = await drawCards(deckId, 1);
-    playerCards.cards.push(dealerCards.cards[0]);
-    render();
-    if (sumCardsValues(playerCards.cards) > 21) decideWhoIsTheWin();  
 }
 
 function newHand(){

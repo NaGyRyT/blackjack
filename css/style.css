@@ -8,6 +8,8 @@
 body {
     background-color: darkolivegreen;
     color:lightgoldenrodyellow;
+    padding: 10px;
+    min-width: 375px;
 }
 
 h1{
@@ -16,27 +18,79 @@ h1{
 
 button {
     cursor: pointer;
+    padding: 3px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
 .hidden {
     visibility: hidden;
 }
 
+.new-game{
+    display: block;
+    margin: 0px auto;
+    
+  }
+
 .disable-pointer-events {
     pointer-events: none;
 }
 
 .messages-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    font-size: 24px;
-
+    font-size: 22px;
+    height: 52px;
 }
-.playerCoins-container {
+
+.player-container, 
+.pot-container,
+.player-cards-container,
+.dealer-cards-container  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    border: 1px solid white;
+    border-radius: 20px;
+    padding: 5px;
+    background: rgba(6, 53, 18, 0.5);
+    width: 90%;
+    max-width: 600px;
+}
+
+.player-cards-container,
+.dealer-cards-container {
+    height: 180px;
+}
+
+.player-container {
+    height: 116px;
+}
+
+.player-chips-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-coins-container {
     padding: 10px;
     display: flex;
+    justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 50px;
+    gap: 25px;
+
 }
 .coin-1, .coin-10, .coin-100, .coin-500 {
     display: flex;
@@ -48,7 +102,6 @@ button {
     cursor: pointer;
     font-weight: bold;
     font-size: 20px
-    
 }
 
 .coin-1 {
@@ -75,18 +128,12 @@ button {
     border: 8px dashed rgb(47, 48, 49);
 }
 
-.player-cards-container,
-.computer-cards-container {
-    position: relative;
-    left: 60px;
-    display: flex;
-    justify-content: center;
-}
-
+/*.player-cards-container img:first-child{
+    transform: rotate(-5deg);
+}*/
 .player-cards-container img,
-.computer-cards-container img {
-    width: 150px;
-    padding: 10px 10px 10px 0;
-    margin-left: -100px;
-
+.dealer-cards-container img {
+    width: 106px;
+    margin-left: -80px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
