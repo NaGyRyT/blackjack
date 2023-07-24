@@ -3,6 +3,7 @@ const dealerCardsContainer = document.querySelector(".js-dealer-cards-container"
 const messagesContainer = document.querySelector(".js-messages-container");
 const playerChipsContainer = document.querySelector(".js-player-chips-container");
 const potContainer = document.querySelector(".js-pot");
+const insuranceContainer = document.querySelector(".js-insurance-container");
 const playerCardsSum = document.querySelector(".js-player-cards-sum");
 const dealerCardsSum = document.querySelector(".js-dealer-cards-sum");
 
@@ -17,7 +18,7 @@ const dealButton = document.querySelector(".js-deal");
 const hitButton = document.querySelector(".js-hit");
 const standButton = document.querySelector(".js-stand");
 const doubleButton = document.querySelector(".js-double");
-
+const insureButton = document.querySelector(".js-insure");
 
 newGameButton.addEventListener("click", newGame);
 newHandButton.addEventListener("click", newHand);
@@ -43,12 +44,13 @@ coin500Button.addEventListener("click", (e) => {
 })
 dealButton.addEventListener("click", () => {
     newDeck();
-    message = "You can HIT or STAND."
+    message = "You can HIT, STAND or DOUBLE."
 });
 
 hitButton.addEventListener("click", handleHit)
 standButton.addEventListener("click", handleStand)
 doubleButton.addEventListener("click", handleDouble)
+insureButton.addEventListener("click", handleInsure)
 
 //program állapot
 let deckId = null;
@@ -58,6 +60,8 @@ let dealerCards;
 let pot = 0;
 let message;
 let firstDrawState;
+let insurance;
+let insuranceValue;
 
 function initialize(playerChipsSum){
     deckId = null;
@@ -67,6 +71,10 @@ function initialize(playerChipsSum){
     pot = 0;
     message ="Place Your Bets and push DEAL button!"
     firstDrawState = true;
+    insurance = false;
+    insuranceValue = 0;
+    playerCardsSum.innerHTML = "Your cards";
+    dealerCardsSum.innerHTML = "Dealer cards";
     render()
 }
 
@@ -75,10 +83,12 @@ async function newDeck() {
     const data = await fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6`)
     const response = await data.json();
     deckId = response.deck_id;
-    playerCards = await drawCards(deckId, 2);
-    playerCards = playerCards.cards;
-    dealerCards = await drawCards(deckId, 2);
-    dealerCards = dealerCards.cards;
+    let temp = await drawCards(deckId, 2);
+    playerCards = temp.cards;
+    temp = await drawCards(deckId, 2);
+    dealerCards = temp.cards;
+    dealerCards[0].code[0] = "A";
+    if (dealerCards[0].code[0] ==="A") insurance = true;
     render();
 }
 
@@ -118,6 +128,9 @@ function renderButtons() {
         else doubleButton.classList.add("hidden");
     if (pot === 0 && dealerCards.length != 0 && playerChips > 0) newHandButton.classList.remove("hidden");
         else newHandButton.classList.add("hidden")
+    if (insurance && insuranceValue === 0) {
+        insureButton.classList.remove("hidden");
+    } else insureButton.classList.add("hidden");
 }
 
 function renderPlayerChips() {
@@ -144,9 +157,12 @@ function renderPlayerChips() {
 }
 
 function renderPot() {
-    if (pot > 0) {
-        potContainer.innerHTML = `<p>${pot}$</p>`;
-    } else potContainer.innerHTML = "0$";
+    if (pot > 0) potContainer.innerHTML = `<p>${pot}$</p>`;
+        else potContainer.innerHTML = "0$";
+    if (insuranceValue > 0) {
+        insuranceContainer.innerHTML = `<legend>Insurance</legend><div><p>${insuranceValue}$</p></div>`;
+        insuranceContainer.classList.remove("hidden")
+    } else insuranceContainer.classList.add("hidden")
 }
 
 function renderPlayerCards() {
@@ -166,14 +182,16 @@ function renderDealerCards() {
         for (let cardIndex in dealerCards) {
             let cardImage = dealerCards[cardIndex].image;
             let cardAlt = dealerCards[cardIndex].code;
-            if (firstDrawState) {
+            if (firstDrawState && cardIndex == 1) {
                 cardImage = 'https://www.deckofcardsapi.com/static/img/back.png';
                 cardAlt = 'Back of Card'
-                firstDrawState = false;
             }
             html += `<img src="${cardImage}" alt="${cardAlt}" />`;
         }
-        dealerCardsSum.innerHTML = `Dealer cards: ${sumCardsValues(dealerCards)}`
+        if (firstDrawState) {
+            dealerCardsSum.innerHTML = `Dealer cards: ${sumCardsValues([dealerCards[0]])}`;
+            firstDrawState = false;
+        } else dealerCardsSum.innerHTML = `Dealer cards: ${sumCardsValues(dealerCards)}`;
         dealerCardsContainer.innerHTML = html;
     }  else dealerCardsContainer.innerHTML = "";
 }
@@ -232,24 +250,44 @@ async function handleHit(){
     if (sumCardsValues(playerCards) > 21) decideWhoIsTheWin();
 }
 
+function handleInsure(){
+    firstDrawState = true;
+    insuranceValue = pot / 2;
+    playerChips -= insuranceValue;
+    render()
+
+}
+
 function decideWhoIsTheWin() {
     if (sumCardsValues(playerCards) > 21 || 
         (sumCardsValues(dealerCards) > sumCardsValues(playerCards) && 
         sumCardsValues(dealerCards) < 22)) {
-            message = "Dealer Wins";
+            message = `You lost $${pot}.`;
             pot = 0;
     } else if (sumCardsValues(dealerCards) > 21 || 
                sumCardsValues(dealerCards) < sumCardsValues(playerCards)) {
-            message = `You Win ${pot}$`;
-            if (playerCards.length === 2) playerChips += pot + (pot * 1.5);
-                else playerChips += pot * 2;
+            message = `You won $${pot}.`;
+            if (playerCards.length === 2 && sumCardsValues(playerCards) === 21) {
+                playerChips += pot + (pot * 1.5);
+                message = `You have BlackJack! You Won $${pot *1.5}.`;
+            } else playerChips += pot * 2;
             pot = 0;
-
     } else {
         message = "Push";
         playerChips += pot;
         pot = 0;
     }
+    if (insuranceValue > 0 && (sumCardsValues(dealerCards) === 21 && dealerCards.length === 2) ) {
+        message += ` & You won the insurance $${insuranceValue}.`; 
+        playerChips += insuranceValue *2;
+        insuranceValue = 0;
+        insurance = false;
+    } else if (insuranceValue > 0){
+        message += ` & You lost the insurance $${insuranceValue}.`;
+        insuranceValue = 0;
+        insurance = false;
+    }
+
     if (pot = 0) newHandButton.classList.remove("hidden");
     render()
 }

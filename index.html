@@ -8,12 +8,17 @@
 </head>
 <body>
     <h1>Blackjack</h1>
-    <button class="new-game js-new-game">New Game</button>
     <div class="desk">
-        <fieldset class="pot-container">
-            <legend>Pot</legend>
-            <div class="pot js-pot">0$</div>
-        </fieldset>
+        <div class="pots-container">
+            <fieldset class="pot-container">
+                <legend>Pot</legend>
+                <div class="pot js-pot">0$</div>
+            </fieldset>
+            <fieldset class="pot-container js-insurance-container hidden">
+                <legend>Insurance</legend>
+                <div>0$</div>
+            </fieldset>
+        </div>
 
         <fieldset class="dealer-cards-container">
             <legend class ="js-dealer-cards-sum">Dealer cards</legend>
@@ -34,23 +39,25 @@
                 <div class="coin-500 js-coin-500 hidden" >500</div>
             </div>
         </fieldset>
-        <div class="buttons">
-            <button class="new-hand js-new-hand hidden">New Hand</button>
-            <!--Ha kész vagyok a tétekkel-->
-            <button class="deal hidden js-deal">Deal</button>
-            <!--//kérek kártyát-->
-            <button class="hit hidden js-hit">Hit</button>
-            <!--nem kérek kártyát-->
-            <button class="stand hidden js-stand">Stand</button>
-            <!--Dupla tét csak egy kártyát-->
-            <button class="double hidden js-double">Double</button>
-            <!--//két egyforma kártyánál jelenik meg-->
-            <button class="split hidden js-split">Split</button>
-            <!--ha az osztónak látszik egy ásza ilyenkor lefelezhető a BET ha az osztónál blackjack van -->
-            <button class="insure hidden js-insure">Insure</button>
-        </div>
-        
-        
+        <fieldset class="buttons-container">
+            <legend>Buttons</legend>
+            <div>
+                <button class="new-game js-new-game">New Game</button>
+                <button class="new-hand js-new-hand hidden">New Hand</button>
+                <!--Ha kész vagyok a tétekkel-->
+                <button class="deal hidden js-deal">Deal</button>
+                <!--//kérek kártyát-->
+                <button class="hit hidden js-hit">Hit</button>
+                <!--nem kérek kártyát-->
+                <button class="stand hidden js-stand">Stand</button>
+                <!--Dupla tét csak egy kártyát-->
+                <button class="double hidden js-double">Double</button>
+                <!--//két egyforma kártyánál jelenik meg-->
+                <button class="split hidden js-split">Split</button>
+                <!--ha az osztónak látszik egy ásza ilyenkor lefelezhető a BET ha az osztónál blackjack van -->
+                <button class="insure hidden js-insure">Insure</button>
+            </div>
+        </fieldset>
     </div>
     <script src="./js/main.js"></script>
 </body>

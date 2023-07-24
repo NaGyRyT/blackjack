@@ -32,12 +32,6 @@ button {
     visibility: hidden;
 }
 
-.new-game{
-    display: block;
-    margin: 0px auto;
-    
-  }
-
 .disable-pointer-events {
     pointer-events: none;
 }
@@ -51,10 +45,22 @@ button {
     height: 52px;
 }
 
+.pots-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 10px;
+    margin: 0 auto;
+    flex-direction: row;
+    width: 90%;
+    max-width: 600px;
+}
+
 .player-container, 
 .pot-container,
 .player-cards-container,
-.dealer-cards-container  {
+.dealer-cards-container,
+.buttons-container  {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,24 +114,28 @@ button {
     background-color: white;
     color: black;
     border: 8px solid rgb(126, 156, 240);
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 
 .coin-10 {
     background-color: white;
     color: black;
     border: 8px dashed rgb(184, 192, 214);
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 
 .coin-100 {
     background-color: white;
     color: black;
     border: 8px solid rgb(121, 202, 161);
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 
 .coin-500 {
     background-color: white;
     color: black;
     border: 8px dashed rgb(47, 48, 49);
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 
 /*.player-cards-container img:first-child{
