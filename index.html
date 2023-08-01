@@ -7,16 +7,27 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <h1>Blackjack</h1>
-    <div class="desk">
+    <header class="header">
+        <div>
+            <h1>Blackjack</h1>
+        </div>
+        <div class="new-game-container">
+            <button class="new-game-button js-new-game">New Game</button>
+        </div>
+    </header>
+    <main class="desk">
         <div class="pots-container">
             <fieldset class="pot-container">
-                <legend>Pot</legend>
-                <div class="pot js-pot">0$</div>
+                <legend>Bets</legend>
+                <div class="pot js-pot">$0</div>
             </fieldset>
-            <fieldset class="pot-container js-insurance-container hidden">
+            <fieldset class="pot-container js-insurance-pot-container display-none">
                 <legend>Insurance</legend>
-                <div>0$</div>
+                <div>$0</div>
+            </fieldset>
+            <fieldset class="pot-container js-split-pot-container display-none">
+                <legend>Insurance</legend>
+                <div>$0</div>
             </fieldset>
         </div>
 
@@ -25,40 +36,36 @@
             <div class="js-dealer-cards-container"></div>
         </fieldset>
         <div class="messages-container js-messages-container">Start the game with "New Game" button!</div>
-        <fieldset class ="player-cards-container">
-            <legend class="js-player-cards-sum">Your cards</legend>
-            <div class="js-player-cards-container"></div>
-        </fieldset>
+        <div class="common-player-cards-container">
+            <fieldset class ="js-player-cards-fieldset player-cards-fieldset">
+                <legend class="js-player-cards-sum">Your cards</legend>
+                <div class="js-player-cards-container"></div>
+            </fieldset>
+            <fieldset class ="js-player-cards-split-fieldset display-none player-cards-split-container">
+                <legend class="js-player-cards-split-sum">Your splitted cards</legend>
+                <div class="js-player-cards-split-container"></div>
+            </fieldset>
+        </div>
         <fieldset class="player-container">
-            <legend>Your Chips</legend>
-            <div class="player-chips-container js-player-chips-container"></div>
-            <div class="player-coins-container js-player-coins-container">
+            <legend class="js-player-chips-container">Your Chips</legend>
+            <div class="player-chips-container">
                 <div class="coin-1 js-coin-1 hidden">1</div>
                 <div class="coin-10 js-coin-10 hidden">10</div>
                 <div class="coin-100 js-coin-100 hidden">100</div>
                 <div class="coin-500 js-coin-500 hidden" >500</div>
             </div>
         </fieldset>
-        <fieldset class="buttons-container">
-            <legend>Buttons</legend>
-            <div>
-                <button class="new-game js-new-game">New Game</button>
-                <button class="new-hand js-new-hand hidden">New Hand</button>
-                <!--Ha kész vagyok a tétekkel-->
-                <button class="deal hidden js-deal">Deal</button>
-                <!--//kérek kártyát-->
-                <button class="hit hidden js-hit">Hit</button>
-                <!--nem kérek kártyát-->
-                <button class="stand hidden js-stand">Stand</button>
-                <!--Dupla tét csak egy kártyát-->
-                <button class="double hidden js-double">Double</button>
-                <!--//két egyforma kártyánál jelenik meg-->
-                <button class="split hidden js-split">Split</button>
-                <!--ha az osztónak látszik egy ásza ilyenkor lefelezhető a BET ha az osztónál blackjack van -->
-                <button class="insure hidden js-insure">Insure</button>
+            <div class="buttons-container">
+                
+                <button class="hidden new-hand js-new-hand ">New Hand</button>
+                <button class="hidden deal js-deal">Deal</button>
+                <button class="hidden hit js-hit">Hit</button>
+                <button class="hidden stand js-stand">Stand</button>
+                <button class="hidden double js-double">Double</button>
+                <button class="hidden split js-split">Split</button>
+                <button class="hidden insure js-insure">Insure</button>
             </div>
-        </fieldset>
-    </div>
+    </main>
     <script src="./js/main.js"></script>
 </body>
 </html>

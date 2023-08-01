@@ -8,24 +8,45 @@
 body {
     background-color: darkolivegreen;
     color:lightgoldenrodyellow;
-    padding: 10px;
     min-width: 375px;
+    font-size: 13px;
 }
 
-h1{
-    text-align: center;
-}
-
-button {
-    cursor: pointer;
-    padding: 3px;
-}
-
-.buttons {
+.header {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    margin: 5px auto;
+    max-width: 600px;
+    width: 95%;
+    height: 45px;
+}
+
+.new-game-container{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    height: 45px;
+    width: 45px;
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+legend{
+    margin: 0 0 0 10px;
 }
 
 .hidden {
@@ -41,63 +62,87 @@ button {
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 22px;
+    font-size: 20px;
     height: 52px;
 }
 
 .pots-container {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 5px;
     margin: 0 auto;
     flex-direction: row;
-    width: 90%;
+    width: 95%;
     max-width: 600px;
 }
 
 .player-container, 
 .pot-container,
-.player-cards-container,
+.player-cards-fieldset,
 .dealer-cards-container,
-.buttons-container  {
+.buttons-container,
+.player-cards-split-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    margin: 0 auto;
+    margin: 5px auto;
     border: 1px solid white;
     border-radius: 20px;
     padding: 5px;
     background: rgba(6, 53, 18, 0.5);
-    width: 90%;
+    width: 95%;
     max-width: 600px;
 }
 
-.player-cards-container,
-.dealer-cards-container {
-    height: 180px;
+.player-cards-fieldset,
+.dealer-cards-container,
+.player-cards-split-container {
+    height: 160px;
+}
+
+.pot-container,
+.player-cards-fieldset,
+.player-cards-split-container {
+    margin: 0;
+    width: 100%;
+}
+
+.common-player-cards-container{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 0;
+    flex-direction: row;
+    max-width: 600px;
+    width: 95%;
+    gap:5px;
+}
+
+.display-none{
+    display: none;
 }
 
 .player-container {
-    height: 116px;
+    height: 95px;
 }
 
 .player-chips-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-}
-
-.player-coins-container {
-    padding: 10px;
-    display: flex;
-    justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 25px;
-
 }
+
+.buttons-container{
+    background: none;
+    border: none;
+    gap: 5px;
+}
+
 .coin-1, .coin-10, .coin-100, .coin-500 {
     display: flex;
     justify-content: center;
@@ -138,12 +183,56 @@ button {
     box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 
-/*.player-cards-container img:first-child{
-    transform: rotate(-5deg);
-}*/
-.player-cards-container img,
-.dealer-cards-container img {
-    width: 106px;
-    margin-left: -80px;
+.card-img {
+    position: absolute;
+    top: 2px;
+    width: 95px;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+
+.card-img:nth-of-type(1) {
+    left: 5px;
+}
+
+.card-img:nth-of-type(2) {
+    left: 20px;
+}
+
+.card-img:nth-of-type(3) {
+    left: 35px;
+}
+
+.card-img:nth-of-type(4) {
+    left: 50px;
+}
+
+.card-img:nth-of-type(5) {
+    left: 65px;
+}
+
+.card-img:nth-of-type(6) {
+    left: 80px;
+}
+
+.card-img:nth-of-type(7) {
+    left: 95px;
+}
+
+/**************************breakpoints********************/
+@media (min-width: 450px) {
+    body {
+        font-size: 14px;
+    };
+
+    button {
+        height: 50px;
+        width: 50px;
+        font-size: 10px;
+    
+    }
+
+    .messages-container {
+        font-size: 24px;
+        height: 60px;
+    }
 }
