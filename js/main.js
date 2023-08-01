@@ -276,7 +276,7 @@ async function handleDeal() {
     render();
 }
 
-//const delay = ms => new Promise(res => setTimeout(res, ms));
+
 async function handleStand() {
     standButton.setAttribute("disabled","");
     if (splitRound === 0 || splitRound === 2) {
@@ -303,7 +303,6 @@ async function handleDouble() {
     playerChips -= pot;
     pot += pot;
     await handleHit()
-    console.log(sumCardsValues(playerCards))
     if (sumCardsValues(playerCards) < 22) handleStand();
 }
 
@@ -355,20 +354,20 @@ async function handleSplit(){
 }
 
 function decideWhoWonTheHand(playerOrSplitCards, potOrSplitPot) {
-    if ((sumCardsValues(playerOrSplitCards) > 21 && sumCardsValues(dealerCards) < 22)|| 
-       (sumCardsValues(dealerCards) > sumCardsValues(playerOrSplitCards) && 
-        sumCardsValues(dealerCards) < 22) ||
-       (dealerCards.length === 2 && sumCardsValues(dealerCards) === 21 &&
-        playerOrSplitCards.length > 2 && sumCardsValues(playerOrSplitCards) === 21)) {
+    let playerCardsSum = sumCardsValues(playerOrSplitCards);
+    let dealerCardsSum = sumCardsValues(dealerCards);
+    if ((playerCardsSum > 21 && dealerCardsSum < 22)|| 
+        (dealerCardsSum > playerCardsSum && dealerCardsSum < 22) ||
+        (dealerCards.length === 2 && dealerCardsSum === 21 && playerOrSplitCards.length > 2 && playerCardsSum === 21)) {
             if (splitRound === 2) message += ` You lost $${potOrSplitPot}`;
                 else message = `You lost $${potOrSplitPot}`
-    } else if (playerOrSplitCards.length === 2 && sumCardsValues(playerOrSplitCards) === 21 &&
-                !(dealerCards.length = 2 && sumCardsValues(dealerCards) === 21)) {
+    } else if (playerOrSplitCards.length === 2 && playerCardsSum === 21 &&
+                !(dealerCards.length === 2 && dealerCardsSum === 21)) {
         playerChips += potOrSplitPot + Math.round((potOrSplitPot * 1.5));
         if (splitRound === 2) message += ` You had BlackJack, You Won $${Math.round(potOrSplitPot *1.5)}`;
             else message = `You had BlackJack! You Won $${Math.round(potOrSplitPot *1.5)}`;
-    } else if ((sumCardsValues(dealerCards) > 21 && sumCardsValues(playerOrSplitCards) < 22) || 
-               (22 > sumCardsValues(dealerCards) && sumCardsValues(dealerCards) < sumCardsValues(playerCards))) {
+    } else if ((dealerCardsSum > 21 && playerCardsSum < 22) || 
+               (22 > dealerCardsSum && dealerCardsSum < playerCardsSum)) {
         playerChips += potOrSplitPot * 2;
         if (splitRound === 2) message += ` You won $${potOrSplitPot}`;
             else message = `You won $${potOrSplitPot}`;
@@ -394,9 +393,9 @@ function decideWhoWonTheInsurance(){
     }
 }
 
-function decideWhoWonTheSplit() {
+/*function decideWhoWonTheSplit() {
     
-}
+}*/
 
 function newHand() {
     initialize(playerChips);
