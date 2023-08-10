@@ -199,8 +199,8 @@ legend {
 
 .coin-5 {
     background-color: rgb(212, 0, 0);
-    color: white;
-    border: 8px dashed white;
+    color: rgb(255, 255, 255);
+    border: 8px dashed rgb(255, 255, 255);
     box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 
@@ -303,9 +303,9 @@ legend {
     color: var(--font-color);
 }
 
-.popup h2 {
+.popup h2, .popup h3 {
     text-align: center;
-    padding: 5px;
+    padding: 0 5px 5px 5px;
 }
 
 .popup .close {
@@ -332,7 +332,6 @@ legend {
         height: 50px;
         width: 50px;
         font-size: 10px;
-    
     }
 
     .messages-container {
