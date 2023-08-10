@@ -13,6 +13,7 @@ const dealerCardsSum = document.querySelector(".js-dealer-cards-sum");
 const playerCardsSplitSum = document.querySelector(".js-player-cards-split-sum");
 
 const coin1Button = document.querySelector(".js-coin-1");
+const coin5Button = document.querySelector(".js-coin-5");
 const coin10Button = document.querySelector(".js-coin-10");
 const coin100Button = document.querySelector(".js-coin-100");
 const coin500Button = document.querySelector(".js-coin-500");
@@ -27,6 +28,7 @@ const insureButton = document.querySelector(".js-insure");
 const splitButton = document.querySelector(".js-split");
 
 coin1Button.addEventListener("click", () => handleCoin(1));
+coin5Button.addEventListener("click", () => handleCoin(5));
 coin10Button.addEventListener("click", () => handleCoin(10));
 coin100Button.addEventListener("click", () => handleCoin(100));
 coin500Button.addEventListener("click", () => handleCoin(500));
@@ -77,7 +79,6 @@ function initialize(playerChipsSum) {
 }
 
 // pakli lekérdezés + render
-
 async function newDeck() {
     const data = await fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6`)
     const response = await data.json();
@@ -97,8 +98,6 @@ async function drawCards(deckId, cardsNumber) {
 } 
 
 // render függvények
-
-
 function render() {
     renderPlayerChips();
     renderPlayerCards();
@@ -110,10 +109,6 @@ function render() {
 }
 
 function renderMessages() {
-    /*if (!doubleButton.classList.contains("hidden")) message += ", DOUBLE";
-        else message = message.replace(", DOUBLE","");
-    if (!insureButton.classList.contains("hidden")) message += ", INSURE";
-        else message = message.replace(", INSURE","");*/
     messagesContainer.innerHTML = `${message}`;
 }
 
@@ -162,6 +157,8 @@ function renderButtons() {
 function renderPlayerChips() {
     if (playerChips > 0) coin1Button.classList.remove("hidden");
         else coin1Button.classList.add("hidden");
+    if (playerChips /5 >= 1) coin5Button.classList.remove("hidden");
+        else coin5Button.classList.add("hidden");
     if (playerChips / 10 >= 1) coin10Button.classList.remove("hidden");
         else coin10Button.classList.add("hidden");
     if (playerChips / 100 >= 1) coin100Button.classList.remove("hidden");
@@ -171,11 +168,13 @@ function renderPlayerChips() {
     playerChipsContainer.innerHTML = `<p>Your Chips: $${playerChips}</p>`;
     if (playerCards.length != 0) {
         coin1Button.classList.add("disable-pointer-events");
+        coin5Button.classList.add("disable-pointer-events");
         coin10Button.classList.add("disable-pointer-events");
         coin100Button.classList.add("disable-pointer-events");
         coin500Button.classList.add("disable-pointer-events");
     } else {
         coin1Button.classList.remove("disable-pointer-events");
+        coin5Button.classList.remove("disable-pointer-events");
         coin10Button.classList.remove("disable-pointer-events");
         coin100Button.classList.remove("disable-pointer-events");
         coin500Button.classList.remove("disable-pointer-events");
@@ -272,10 +271,9 @@ function handleCoin(coin) {
 
 async function handleDeal() {
     await newDeck();
-    message = "You can HIT, STAND"
+    message = "You can choose an action with a button"
     render();
 }
-
 
 async function handleStand() {
     standButton.setAttribute("disabled","");
