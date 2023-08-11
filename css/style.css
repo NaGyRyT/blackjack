@@ -9,9 +9,8 @@
     --background-color: rgb(53, 101, 77);
     --font-color: rgb(238, 229, 233);
     --button-background-color: rgb(238, 229, 233);
-    --button-font-color: rgb(53, 101, 77);
+    --button-font-color: rgb(46, 77, 62);
     --hover-text: rgba(0, 0, 0, 0.63);
-
 }
 
 body {
@@ -63,7 +62,12 @@ body {
     top: 0;
 }
 
-button {
+.button {
+    border-width: 0;
+    font-family: inherit;
+    font-style: inherit;
+    line-height: inherit;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,8 +78,9 @@ button {
     color: var(--button-font-color);
     height: 45px;
     width: 45px;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: bold;
+    text-align: center;
     text-transform: uppercase;
 }
 
@@ -140,7 +145,6 @@ legend {
 .pot-container,
 .player-cards-fieldset,
 .player-cards-split-container {
-    margin: 0;
     width: 100%;
 }
 
@@ -177,7 +181,7 @@ legend {
     gap: 5px;
 }
 
-/********************Coins***********************/
+/********************Chips***********************/
 .coin-1, .coin-5, .coin-10, .coin-100, .coin-500 {
     display: flex;
     justify-content: center;
@@ -289,7 +293,6 @@ legend {
     position: relative;
     border-radius: 20px;
     max-width: 550px;
-    /*min-width: 350px;*/
     padding: 10px;
     list-style: circle;
     color: var(--font-color);
@@ -325,13 +328,18 @@ legend {
 /**************************breakpoints********************/
 @media (min-width: 450px) {
     body {
-        font-size: 14px;
-    };
+        font-size: 16px;
+    }
 
-    button {
-        height: 50px;
-        width: 50px;
-        font-size: 10px;
+    .header {
+        height: 55px;
+    }
+
+
+    .button {
+        height: 55px;
+        width: 55px;
+        font-size: 12px;
     }
 
     .messages-container {
