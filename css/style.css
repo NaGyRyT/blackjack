@@ -52,8 +52,18 @@ body {
     border-radius: 50%;
     padding: 2px;
     font-size: 20px;
-    font-family:'Times New Roman', Times, serif;
-    text-transform: lowercase;
+}
+
+.settings-button-container{
+    position: absolute;
+    left: 60px;
+    top: 0;
+}
+
+.settings-button a {
+    text-decoration: none;
+    font-size: 35px;
+    color: var(--background-color);
 }
 
 .new-game-button-container {
@@ -290,6 +300,7 @@ legend {
     margin: 5px auto;
     border: 2px solid var(--font-color);
     width: 90%;
+    min-width: 300px;
     position: relative;
     border-radius: 20px;
     max-width: 550px;
@@ -324,6 +335,16 @@ legend {
 .popup .close:hover {
     color: var(--hover-text);
 }
+
+.settings-ok-button {
+ margin: 0 auto;
+}
+
+.settings-ok-button a {
+    text-decoration: none;
+    color: var(--background-color);
+}
+
 
 /**************************breakpoints********************/
 @media (min-width: 450px) {

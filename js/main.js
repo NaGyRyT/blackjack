@@ -26,7 +26,24 @@ const standButton = document.querySelector(".js-stand");
 const doubleButton = document.querySelector(".js-double");
 const insureButton = document.querySelector(".js-insure");
 const splitButton = document.querySelector(".js-split");
+const settingsButton = document.querySelector(".js-settings-button");
+const settingsOkButton = document.querySelector(".js-settings-ok-button")
 
+const deckSlider = document.querySelector(".js-deck-slider");
+const deckNumber = document.querySelector(".js-deck-number-value");
+const chipsSlider = document.querySelector(".js-chips-slider");
+const chipsValue = document.querySelector(".js-chips-value");
+
+
+deckSlider.addEventListener("input", (e) => {
+    deckNumber.innerText = e.target.value;
+})
+
+chipsSlider.addEventListener("input", (e) => {
+    chipsValue.innerText = e.target.value;
+})
+
+/*************************Events**************************/
 coin1Button.addEventListener("click", () => handleCoin(1));
 coin5Button.addEventListener("click", () => handleCoin(5));
 coin10Button.addEventListener("click", () => handleCoin(10));
@@ -41,8 +58,34 @@ standButton.addEventListener("click", handleStand);
 doubleButton.addEventListener("click", handleDouble);
 insureButton.addEventListener("click", handleInsure);
 splitButton.addEventListener("click", handleSplit);
+settingsButton.addEventListener("click", handleSettings);
+settingsOkButton.addEventListener("click", handleSettingsOkButton);
 
-/**********************initialization************************/
+function handleSettingsOkButton(){
+    localStorage.setItem("deckNumber", deckSlider.value);
+    localStorage.setItem("chipsValue", chipsSlider.value);
+}
+
+function handleSettings(){
+    if (localStorage.getItem("deckNumber") > 0) {
+        deckNumber.innerText = localStorage.getItem("deckNumber");
+        deckSlider.value = localStorage.getItem("deckNumber");
+    } else {
+        localStorage.setItem("deckNumber", 6);
+        deckNumber.innerText = 6;
+        deckSlider.value = 6;
+    }
+    if (localStorage.getItem("chipsValue") > 0) {
+        chipsValue.innerText = localStorage.getItem("chipsValue");
+        chipsSlider.value = localStorage.getItem("chipsValue");
+    } else {
+        localStorage.setItem("chipsValue", 2500);
+        chipsValue.innerText = 2500;
+        chipsSlider.value = 2500;
+    }
+}
+
+/*********************initialization**********************/
 let deckId = null;
 let playerCards;
 let playerSplitCards;
@@ -57,6 +100,7 @@ let insurancePot;
 let splitRound;
 let firstStand;
 let timeoutIds;
+handleSettings();
 
 function initialize(playerChipsSum) {
     deckId = null;
@@ -76,12 +120,12 @@ function initialize(playerChipsSum) {
     playerCardsSum.innerHTML = "Your cards";
     dealerCardsSum.innerHTML = "Dealer cards";
     timeoutIds = [];
-    render()
+    render();
 }
 
 /**********************fetch decks************************/
 async function newDeck() {
-    const data = await fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6`)
+    const data = await fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${localStorage.getItem("deckNumber")}`)
     const response = await data.json();
     deckId = response.deck_id;
     let temp = await drawCards(deckId, 2);
@@ -145,12 +189,12 @@ function renderButtons() {
         }
         else insureButton.classList.add("hidden");
     //********hogy mindig split legyen csak TESZT miatt*******/
-            if (playerCards.length === 2 && splitRound === 0) {
+        /*    if (playerCards.length === 2 && splitRound === 0) {
                 playerCards[1] = playerCards[0];
                 renderPlayerCards();
                 renderPlayerSplitCards();
     
-            }
+            }*/
     //split button
     if (playerCards.length === 2 && 
         playerCards[1].code[0] === playerCards[0].code[0] && 
@@ -429,5 +473,5 @@ function newHand() {
 }
 
 function newGame() {
-    initialize(2500);
+    initialize(localStorage.getItem("chipsValue"));
 }
