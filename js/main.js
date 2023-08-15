@@ -35,14 +35,6 @@ const chipsSlider = document.querySelector(".js-chips-slider");
 const chipsValue = document.querySelector(".js-chips-value");
 
 
-deckSlider.addEventListener("input", (e) => {
-    deckNumber.innerText = e.target.value;
-})
-
-chipsSlider.addEventListener("input", (e) => {
-    chipsValue.innerText = e.target.value;
-})
-
 /*************************Events**************************/
 coin1Button.addEventListener("click", () => handleCoin(1));
 coin5Button.addEventListener("click", () => handleCoin(5));
@@ -60,30 +52,9 @@ insureButton.addEventListener("click", handleInsure);
 splitButton.addEventListener("click", handleSplit);
 settingsButton.addEventListener("click", handleSettings);
 settingsOkButton.addEventListener("click", handleSettingsOkButton);
+deckSlider.addEventListener("input", (e) => deckNumber.innerText = e.target.value);
+chipsSlider.addEventListener("input", (e) => chipsValue.innerHTML = `$${e.target.value}`);
 
-function handleSettingsOkButton(){
-    localStorage.setItem("deckNumber", deckSlider.value);
-    localStorage.setItem("chipsValue", chipsSlider.value);
-}
-
-function handleSettings(){
-    if (localStorage.getItem("deckNumber") > 0) {
-        deckNumber.innerText = localStorage.getItem("deckNumber");
-        deckSlider.value = localStorage.getItem("deckNumber");
-    } else {
-        localStorage.setItem("deckNumber", 6);
-        deckNumber.innerText = 6;
-        deckSlider.value = 6;
-    }
-    if (localStorage.getItem("chipsValue") > 0) {
-        chipsValue.innerText = localStorage.getItem("chipsValue");
-        chipsSlider.value = localStorage.getItem("chipsValue");
-    } else {
-        localStorage.setItem("chipsValue", 2500);
-        chipsValue.innerText = 2500;
-        chipsSlider.value = 2500;
-    }
-}
 
 /*********************initialization**********************/
 let deckId = null;
@@ -111,7 +82,7 @@ function initialize(playerChipsSum) {
     pot = 0;
     splitPot = 0;
     insurancePot = 0;
-    message ="Place Your Bets and push DEAL button"
+    message ="Place Your Bets and push DEAL button!"
     hideDealerCard = true;
     hideInsureButton = true;
     splitRound = 0;
@@ -123,7 +94,7 @@ function initialize(playerChipsSum) {
     render();
 }
 
-/**********************fetch decks************************/
+/*********************fetch deck(s)***********************/
 async function newDeck() {
     const data = await fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${localStorage.getItem("deckNumber")}`)
     const response = await data.json();
@@ -134,7 +105,7 @@ async function newDeck() {
     dealerCards = temp.cards;
 }
 
-/**********************fetch card(s)************************/
+/*********************fetch card(s)***********************/
 async function drawCards(deckId, cardsNumber) {
     if (deckId == null) return
     const data = await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${cardsNumber}`)
@@ -188,14 +159,7 @@ function renderButtons() {
             hideInsureButton = false;
         }
         else insureButton.classList.add("hidden");
-    //********hogy mindig split legyen csak TESZT miatt*******/
-        /*    if (playerCards.length === 2 && splitRound === 0) {
-                playerCards[1] = playerCards[0];
-                renderPlayerCards();
-                renderPlayerSplitCards();
-    
-            }*/
-    //split button
+    // split button
     if (playerCards.length === 2 && 
         playerCards[1].code[0] === playerCards[0].code[0] && 
         pot <= playerChips && 
@@ -289,15 +253,17 @@ function renderDealerCards() {
 
 /****************handle functions*************************/
 function handleCoin(coin) {
-    pot += coin;
-    playerChips -= coin;
+    if (playerChips > 0) {
+        pot += coin;
+        playerChips -= coin;
+    }
     render()
 }
 
 async function handleDeal() {
     disableButtons();
     await newDeck();
-    message = "You can choose an action with a button"
+    message = "You can choose an action with a button."
     render();
     enableButtons();
 }
@@ -306,7 +272,7 @@ async function handleStand() {
     disableButtons();
     if (splitRound === 1) {
         hideDealerCard = true;
-        message = "Right hand";
+        message = "Right hand.";
     } else {
         hideDealerCard = false;
         message="";
@@ -326,7 +292,7 @@ async function handleStand() {
 
 async function handleDouble() {
     disableButtons();
-    if (splitRound <= 1 ){
+    if (splitRound <= 1 ) {
         playerChips -= pot;
         pot += pot;
         await handleHit()
@@ -365,7 +331,7 @@ function handleInsure() {
     render()
 }
 
-async function handleSplit(){
+async function handleSplit() {
     disableButtons();
     splitRound = 1;
     hideDealerCard = true;
@@ -379,13 +345,37 @@ async function handleSplit(){
     temp = await drawCards(deckId, 1);
     temp = temp.cards;
     playerSplitCards.push(temp[0]);
-    message = "Left hand"
+    message = "Left hand."
     enableButtons();
     render();
 }
 
+function handleSettingsOkButton() {
+    localStorage.setItem("deckNumber", deckSlider.value);
+    localStorage.setItem("chipsValue", chipsSlider.value);
+}
+
+function handleSettings() {
+    if (localStorage.getItem("deckNumber") > 0) {
+        deckNumber.innerText = localStorage.getItem("deckNumber");
+        deckSlider.value = localStorage.getItem("deckNumber");
+    } else {
+        localStorage.setItem("deckNumber", 6);
+        deckNumber.innerText = 6;
+        deckSlider.value = 6;
+    }
+    if (localStorage.getItem("chipsValue") > 0) {
+        chipsValue.innerText = `$${localStorage.getItem("chipsValue")}`;
+        chipsSlider.value = localStorage.getItem("chipsValue");
+    } else {
+        localStorage.setItem("chipsValue", 2500);
+        chipsValue.innerText = $2500;
+        chipsSlider.value = 2500;
+    }
+}
+
 /******************enable/disable buttons**********************/
-function disableButtons(){
+function disableButtons() {
     dealButton.setAttribute("disabled","")
     standButton.setAttribute("disabled","");
     hitButton.setAttribute("disabled", "");
@@ -394,7 +384,7 @@ function disableButtons(){
     insureButton.setAttribute("disabled","");
 }
 
-function enableButtons(){
+function enableButtons() {
     dealButton.removeAttribute("disabled")
     standButton.removeAttribute("disabled");
     hitButton.removeAttribute("disabled");
@@ -433,36 +423,38 @@ function decideWhoWonTheHand(playerOrSplitCards, potOrSplitPot) {
     if ((playerCardsSum > 21 && dealerCardsSum < 22)|| 
         (dealerCardsSum > playerCardsSum && dealerCardsSum < 22) ||
         (dealerCards.length === 2 && dealerCardsSum === 21 && playerOrSplitCards.length > 2 && playerCardsSum === 21)) {
-            if (splitRound === 2 || splitRound === 3) message += ` You lost $${potOrSplitPot}`;
-                else message = `You lost $${potOrSplitPot}`
+            if (splitRound === 2 || splitRound === 3) message += ` You lost $${potOrSplitPot}.`;
+                else message = `You lost $${potOrSplitPot}.`
     } else if (playerOrSplitCards.length === 2 && playerCardsSum === 21 &&
                 !(dealerCards.length === 2 && dealerCardsSum === 21)) {
         playerChips += potOrSplitPot + Math.round((potOrSplitPot * 1.5));
-        if (splitRound === 2 || splitRound === 3) message += ` You had Blackjack, You Won $${Math.round(potOrSplitPot *1.5)}`;
-            else message = `You had Blackjack! You Won $${Math.round(potOrSplitPot *1.5)}`;
+        if (splitRound === 2 || splitRound === 3) message += ` You had Blackjack! You Won $${Math.round(potOrSplitPot *1.5)}.`;
+            else message = `You had Blackjack! You Won $${Math.round(potOrSplitPot *1.5)}.`;
     } else if ((dealerCardsSum > 21 && playerCardsSum < 22) || 
                (22 > dealerCardsSum && dealerCardsSum < playerCardsSum)) {
         playerChips += potOrSplitPot * 2;
-        if (splitRound === 2 || splitRound === 3) message += ` You won $${potOrSplitPot}`;
-            else message = `You won $${potOrSplitPot}`;
+        if (splitRound === 2 || splitRound === 3) message += ` You won $${potOrSplitPot}.`;
+            else message = `You won $${potOrSplitPot}.`;
     } else {
-        if (splitRound === 2 || splitRound === 3) message += " Push";
-            else message = "Push";
+        if (splitRound === 2 || splitRound === 3) message += " Push.";
+            else message = "Push.";
         playerChips += potOrSplitPot;
     }
     if (pot > 0) pot = 0;
         else splitPot = 0;
+    if (playerChips == 0) message += `<p>Game Over! You can start a New Game.</p>`;
+
     decideWhoWonTheInsurance();
     render()
 }
 
-function decideWhoWonTheInsurance(){
+function decideWhoWonTheInsurance() {
     if (insurancePot > 0 && (sumCardsValues(dealerCards) === 21 && dealerCards.length === 2) ) {
-        message += ` You won the insurance $${insurancePot}`; 
+        message += ` You won the insurance $${insurancePot}.`; 
         playerChips += insurancePot *2;
         insurancePot = 0;
     } else if (insurancePot > 0) {
-        message += ` You lost the insurance $${insurancePot}`;
+        message += ` You lost the insurance $${insurancePot}.`;
         insurancePot = 0;
     }
 }

@@ -1,7 +1,7 @@
 # Blackjack
 ## This is a classic Blackjack game
 
-![alt text](/img/printscreen.webp)
+![print screen of my Blackjack game](/img/printscreen.webp)
 
 You can try it, here is the GitHub Pages [link](https://nagyryt.github.io/blackjack/)
 
@@ -13,7 +13,7 @@ You can try it, here is the GitHub Pages [link](https://nagyryt.github.io/blackj
 - If the dealer's first card is an ace you can take out insurance. Insurance is half your bet and pays 2 to 1.
 - If the value of your first two cards are the same, you can split your cards.
 - Rules are from [here](https://en.wikipedia.org/wiki/Blackjack).
-### God Luck!
+## God Luck!
 Cards & decks are from [Deck of Cards](http://www.deckofcardsapi.com/). Thanks for them! :+1: :clap: :smile:
 
 I made this game with HTML, CSS and Vanilla JavaScript.

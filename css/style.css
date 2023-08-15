@@ -34,6 +34,10 @@ body {
     height: 45px;
 }
 
+.text-shadow {
+    text-shadow: 0 0 5px black;
+}
+
 .new-game-button-container {
     position: absolute;
     right: 0;
@@ -97,6 +101,7 @@ legend {
 
 .messages-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -267,6 +272,7 @@ legend {
 .card-img:nth-of-type(7) {
     left: 95px;
 }
+
 /*******************Popup-info************************/
 .overlay {
     display: flex;
