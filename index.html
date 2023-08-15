@@ -10,10 +10,10 @@
     <header class="header">
         <div>
             <div id="info-button" class="info-button-container">
-                <div class="button info-button js-info"><a href="#info">&#8505;</a></div>
+                <a href="#info" class="button info-button js-info">&#8505;</a>
             </div>
             <div id="settings-button" class="settings-button-container">
-                <div class="button settings-button js-settings"><a href="#settings">&#9881;</a></div>
+                <a href="#settings" class="button settings-button js-settings-button">&#9881;</a>
             </div>
             <h1>Blackjack</h1>
         </div>
@@ -41,7 +41,7 @@
             <legend class ="js-dealer-cards-sum">Dealer cards</legend>
             <div class="js-dealer-cards-container"></div>
         </fieldset>
-        <div class="messages-container js-messages-container">Start the game with "New Game" button!</div>
+        <div class="messages-container js-messages-container">Start the game with "New Game" button</div>
         <div class="common-player-cards-container">
             <fieldset class ="js-player-cards-fieldset player-cards-fieldset">
                 <legend class="js-player-cards-sum">Your cards</legend>
@@ -76,8 +76,9 @@
                 <h2>This is a classic BlackJack game</h2>
                 <a href="#info-button" class="close">&#x2716;</a>
                 <ul>
-                    <li>There are 6 decks in a hand.</li>
-                    <li>Your starting chips are $2500.</li>
+                    <li>Default there are 6 decks in a hand, but you can set it between 1 - 8.</li>
+                    <li>Default starting chips are $2500, but you can set it between $100 - $5000.</li>
+                    <li>I store both values in the browser's Local Storage.</li>
                     <li>BlackJack pays 3 to 2.</li>
                     <li>Dealer must stand on 17.</li>
                     <li>If the dealer's first card is an ace you can take out insurance. Insurance is half your bet and pays 2 to 1.</li>
@@ -91,14 +92,14 @@
                 <p>And finally thanks to the <a href="https://programozaskarrier.hu/" target="_blank">Programozáskarrier</a> team. &#128515;</p>
             </div>
         </article>
-        <article id="settings" class="overlay js-setting-container">
+        <article id="settings" class="overlay settings-container">
             <div class="popup">
                 <h2>Settings</h2>
-                <a href="#settings-button" class="close js-settings-button">&#x2716;</a>
+                <a href="#settings-button" class="close">&#x2716;</a>
                 <p>
                     Deck(s): 
-                    <span class="js-deck-number-value"></span>
-                    <input 
+                    <span class="js-deck-number-value"></span></p>
+                    <p><input 
                         type="range" 
                         min="1" 
                         max="8" 
@@ -106,16 +107,16 @@
                 </p>
                 <p>
                     Chips: 
-                    <span class="js-chips-value"></span>
-                    <input 
+                    <span class="js-chips-value"></span></p>
+                    <p><input 
                         type="range" 
                         step="100"
                         min="100" 
                         max="5000" 
                         class="chips-slider js-chips-slider"/>
                 </p>
-                <p>Changes apply to the New Game</p>
-                <div class="button settings-ok-button js-settings-ok-button"><a href="#settings-button">Ok</a></div>
+                <p>The settings take effect after starting a "New Game".</p>
+                <a href="#settings-button" class="button settings-ok-button js-settings-ok-button">Ok</a>
             </div>
         </article>
 
