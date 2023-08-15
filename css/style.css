@@ -5,7 +5,7 @@
     user-select: none;
 }
 
-:root{
+:root {
     --background-color: rgb(53, 101, 77);
     --font-color: rgb(238, 229, 233);
     --button-background-color: rgb(238, 229, 233);
@@ -17,8 +17,8 @@ body {
     background-color: var(--background-color);
     color: var(--font-color);
     min-width: 375px;
-    font-size: 13px;
-    background-image: url('/img/blackjack.png');
+    font-size: 12px;
+    background-image: url('../img/blackjack.png');
     background-repeat: no-repeat;
     background-position: bottom right;
 }
@@ -75,7 +75,7 @@ body {
 
 .settings-button-container{
     position: absolute;
-    left: 60px;
+    left: 50px;
     top: 0;
 }
 
@@ -142,7 +142,7 @@ legend {
 .player-cards-fieldset,
 .dealer-cards-container,
 .player-cards-split-container {
-    height: 160px;
+    height: 150px;
 }
 
 .pot-container,
@@ -194,7 +194,7 @@ legend {
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 20px
+    font-size: 16px
 }
 
 .coin-1 {
@@ -236,7 +236,7 @@ legend {
 .card-img {
     position: absolute;
     top: 2px;
-    width: 95px;
+    width: 89px;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 
@@ -331,7 +331,7 @@ legend {
 }
 
 .settings-ok-button {
- margin: 0 auto;
+    margin: 10px auto 0px auto;
 }
 
 .settings-container {
@@ -354,7 +354,6 @@ legend {
         height: 55px;
     }
 
-
     .button {
         height: 55px;
         width: 55px;
@@ -362,12 +361,36 @@ legend {
     }
 
     .settings-button,
-    .info-button{
+    .info-button {
         font-size: 35px;
+    }
+
+    .settings-button-container {
+        left: 60px;
+        top: 0;
     }
 
     .messages-container {
         font-size: 24px;
         height: 60px;
+    }
+
+    .player-cards-fieldset,
+    .dealer-cards-container,
+    .player-cards-split-container {
+        height: 180px;
+    }
+
+    .player-container {
+        height: 110px;
+    }
+
+    .card-img {
+        width: 108px;
+    }
+    .coin-1, .coin-5, .coin-10, .coin-100, .coin-500 {
+        width: 55px;
+        height: 55px;
+        font-size: 20px;
     }
 }

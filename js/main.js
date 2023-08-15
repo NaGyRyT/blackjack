@@ -438,8 +438,8 @@ function decideWhoWonTheHand(playerOrSplitCards, potOrSplitPot) {
     } else if (playerOrSplitCards.length === 2 && playerCardsSum === 21 &&
                 !(dealerCards.length === 2 && dealerCardsSum === 21)) {
         playerChips += potOrSplitPot + Math.round((potOrSplitPot * 1.5));
-        if (splitRound === 2 || splitRound === 3) message += ` You had BlackJack, You Won $${Math.round(potOrSplitPot *1.5)}`;
-            else message = `You had BlackJack! You Won $${Math.round(potOrSplitPot *1.5)}`;
+        if (splitRound === 2 || splitRound === 3) message += ` You had Blackjack, You Won $${Math.round(potOrSplitPot *1.5)}`;
+            else message = `You had Blackjack! You Won $${Math.round(potOrSplitPot *1.5)}`;
     } else if ((dealerCardsSum > 21 && playerCardsSum < 22) || 
                (22 > dealerCardsSum && dealerCardsSum < playerCardsSum)) {
         playerChips += potOrSplitPot * 2;
