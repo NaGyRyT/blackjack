@@ -70,7 +70,6 @@ let hideInsureButton
 let insurancePot;
 let splitRound;
 let firstStand;
-let timeoutIds;
 handleSettings();
 
 function initialize(playerChipsSum) {
@@ -90,7 +89,6 @@ function initialize(playerChipsSum) {
     insurancePot = 0;
     playerCardsSum.innerHTML = "Your cards";
     dealerCardsSum.innerHTML = "Dealer cards";
-    timeoutIds = [];
     render();
 }
 
@@ -143,9 +141,16 @@ function renderButtons() {
         standButton.classList.add("hidden");
     }
     // double button
-    if ((pot > 0 || splitPot > 0) && (playerCards.length === 2 || playerSplitCards.length === 2)  && 
+    if ((splitRound <= 1 && 
+        pot > 0 &&
+        playerCards.length === 2 &&
+        sumCardsValues(playerCards) != 21 &&
+        pot <= playerChips) ||
+        (splitRound > 1 &&
+        splitPot > 0 &&
+        playerSplitCards.length === 2 &&
         pot <= playerChips &&
-        (sumCardsValues(playerCards) != 21 || sumCardsValues(playerSplitCards) != 21)) doubleButton.classList.remove("hidden");
+        sumCardsValues(playerSplitCards) != 21)) doubleButton.classList.remove("hidden");
         else doubleButton.classList.add("hidden");
     // new hand button
     if (pot === 0 && dealerCards.length != 0 && playerChips > 0) newHandButton.classList.remove("hidden");
@@ -263,8 +268,14 @@ function handleCoin(coin) {
 async function handleDeal() {
     disableButtons();
     await newDeck();
-    message = "You can choose an action with a button."
-    render();
+    if (sumCardsValues(playerCards) === 21) {
+        hideInsureButton = false;
+        hideDealerCard = false;
+        decideWhoWonTheHand(playerCards, pot);
+    } else {
+        message = "You can choose an action with a button."
+        render();
+    }
     enableButtons();
 }
 
@@ -273,6 +284,19 @@ async function handleStand() {
     if (splitRound === 1) {
         hideDealerCard = true;
         message = "Right hand.";
+        splitRound += 1;
+        if (sumCardsValues(playerSplitCards) === 21 ) {
+            hideDealerCard = false;
+            message="";
+            while  (sumCardsValues(dealerCards) < 17 ) {
+                    let temp = await drawCards(deckId, 1);
+                    temp = temp.cards;
+                    dealerCards.push(temp[0])
+                    render();
+            }
+            decideWhoWonTheHand(playerCards, pot);
+            decideWhoWonTheHand(playerSplitCards, splitPot);
+        }
     } else {
         hideDealerCard = false;
         message="";
@@ -285,7 +309,6 @@ async function handleStand() {
         decideWhoWonTheHand(playerCards, pot);
         if (splitRound === 2 || splitRound === 3) decideWhoWonTheHand(playerSplitCards, splitPot);
     }
-    splitRound += 1;
     enableButtons();
     render();
 }
@@ -313,10 +336,10 @@ async function handleHit() {
     temp = temp.cards;
     if (splitRound <= 1) {
         playerCards.push(temp[0]);
-    if (sumCardsValues(playerCards) > 21) await handleStand();
+    if (sumCardsValues(playerCards) > 20) await handleStand();
     } else {
         playerSplitCards.push(temp[0]);
-        if (sumCardsValues(playerSplitCards) > 21) await handleStand();
+        if (sumCardsValues(playerSplitCards) > 20) await handleStand();
     }
     enableButtons();
     render();
@@ -346,6 +369,9 @@ async function handleSplit() {
     temp = temp.cards;
     playerSplitCards.push(temp[0]);
     message = "Left hand."
+    if (sumCardsValues(playerCards) === 21){
+        handleStand();
+    }
     enableButtons();
     render();
 }
@@ -393,7 +419,7 @@ function enableButtons() {
     insureButton.removeAttribute("disabled");
 }
 
-/*********************summary of cards*********************/
+/*********************sum of cards*********************/
 function sumCardsValues(cards) {
     let cardsSum = 0;
     let numberOfAce = 0;
@@ -428,7 +454,7 @@ function decideWhoWonTheHand(playerOrSplitCards, potOrSplitPot) {
     } else if (playerOrSplitCards.length === 2 && playerCardsSum === 21 &&
                 !(dealerCards.length === 2 && dealerCardsSum === 21)) {
         playerChips += potOrSplitPot + Math.round((potOrSplitPot * 1.5));
-        if (splitRound === 2 || splitRound === 3) message += ` You had Blackjack! You Won $${Math.round(potOrSplitPot *1.5)}.`;
+        if (splitRound === 2 || splitRound === 3) message += `You had Blackjack! You Won $${Math.round(potOrSplitPot *1.5)}.`;
             else message = `You had Blackjack! You Won $${Math.round(potOrSplitPot *1.5)}.`;
     } else if ((dealerCardsSum > 21 && playerCardsSum < 22) || 
                (22 > dealerCardsSum && dealerCardsSum < playerCardsSum)) {
@@ -443,7 +469,6 @@ function decideWhoWonTheHand(playerOrSplitCards, potOrSplitPot) {
     if (pot > 0) pot = 0;
         else splitPot = 0;
     if (playerChips == 0) message += `<p>Game Over! You can start a New Game.</p>`;
-
     decideWhoWonTheInsurance();
     render()
 }
