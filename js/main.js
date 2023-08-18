@@ -27,7 +27,7 @@ const doubleButton = document.querySelector(".js-double");
 const insureButton = document.querySelector(".js-insure");
 const splitButton = document.querySelector(".js-split");
 const settingsButton = document.querySelector(".js-settings-button");
-const settingsOkButton = document.querySelector(".js-settings-ok-button")
+const settingsOkButton = document.querySelector(".js-settings-ok-button");
 
 const deckSlider = document.querySelector(".js-deck-slider");
 const deckNumber = document.querySelector(".js-deck-number-value");
@@ -446,7 +446,7 @@ function sumCardsValues(cards) {
 function decideWhoWonTheHand(playerOrSplitCards, potOrSplitPot) {
     let playerCardsSum = sumCardsValues(playerOrSplitCards);
     let dealerCardsSum = sumCardsValues(dealerCards);
-    if ((playerCardsSum > 21 && dealerCardsSum < 22)|| 
+    if ((playerCardsSum > 21 ) || 
         (dealerCardsSum > playerCardsSum && dealerCardsSum < 22) ||
         (dealerCards.length === 2 && dealerCardsSum === 21 && playerOrSplitCards.length > 2 && playerCardsSum === 21)) {
             if (splitRound === 2 || splitRound === 3) message += ` You lost $${potOrSplitPot}.`;

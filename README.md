@@ -17,5 +17,3 @@ You can try it, here is the GitHub Pages [link](https://nagyryt.github.io/blackj
 Cards & decks are from [Deck of Cards](http://www.deckofcardsapi.com/). Thanks for them! :+1: :clap: :smile:
 
 I made this game with HTML, CSS and Vanilla JavaScript.
-
-GitHub repo is [here](https://github.com/NaGyRyT/blackjack).
