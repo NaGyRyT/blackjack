@@ -149,7 +149,7 @@ function renderButtons() {
         (splitRound > 1 &&
         splitPot > 0 &&
         playerSplitCards.length === 2 &&
-        pot <= playerChips &&
+        splitPot <= playerChips &&
         sumCardsValues(playerSplitCards) != 21)) doubleButton.classList.remove("hidden");
         else doubleButton.classList.add("hidden");
     // new hand button
@@ -218,7 +218,8 @@ function renderPlayerCards() {
         for (let card of playerCards) {
             html += `<img class="card-img" src="${card.image}" alt="${card.code}" />`;
         }       
-            playerCardsSum.innerHTML = `Your cards: ${sumCardsValues(playerCards)}`
+            if (splitRound > 0) playerCardsSum.innerHTML = `Your left hand: ${sumCardsValues(playerCards)}`
+            else playerCardsSum.innerHTML = `Your cards: ${sumCardsValues(playerCards)}`
             playerCardsContainer.innerHTML = html;        
     } else playerCardsContainer.innerHTML = "";
 }
@@ -229,7 +230,7 @@ function renderPlayerSplitCards() {
         for (let card of playerSplitCards) {
             html += `<img class="card-img" src="${card.image}" alt="${card.code}" />`;
             }         
-            playerCardsSplitSum.innerHTML = `Your split cards: ${sumCardsValues(playerSplitCards)}`
+            playerCardsSplitSum.innerHTML = `Your right hand: ${sumCardsValues(playerSplitCards)}`
             playerCardsSplitContainer.innerHTML = html;
             playerCardsSplitFieldset.classList.remove("display-none");
     } else {
@@ -309,6 +310,7 @@ async function handleStand() {
         decideWhoWonTheHand(playerCards, pot);
         if (splitRound === 2 || splitRound === 3) decideWhoWonTheHand(playerSplitCards, splitPot);
     }
+    if (playerChips == 0 ) message += `<p>Game Over! You can start a New Game.</p>`;
     enableButtons();
     render();
 }
@@ -468,7 +470,6 @@ function decideWhoWonTheHand(playerOrSplitCards, potOrSplitPot) {
     }
     if (pot > 0) pot = 0;
         else splitPot = 0;
-    if (playerChips == 0) message += `<p>Game Over! You can start a New Game.</p>`;
     decideWhoWonTheInsurance();
     render()
 }
