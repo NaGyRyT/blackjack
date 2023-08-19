@@ -18,6 +18,7 @@
             </div>
             <h1 class="text-shadow">Blackjack</h1>
         </div>
+        <div class="hidden remaining-cards-countainer js-remaining-cards-container"></div>
         <div class="new-game-button-container">
             <div title="New game" class="button js-new-game">New Game</div>
         </div>
@@ -77,8 +78,10 @@
                 <a href="#info-button" class="close">&#x2716;</a>
                 <ul>
                     <li>Default there are 6 decks in a hand, but you can set it between 1 - 8.</li>
+                    <li>There will be new decks if the number of remaining cards is 52 or less (1 deck) or if you start a new game.</li>
+                    <li>You can see remaining cards if you enable it in the setting. Default is disabled.</li>
                     <li>Default starting chips are $2500, but you can set it between $100 - $5000.</li>
-                    <li>I store both values in the browser's Local Storage.</li>
+                    <li>I store all three values in the browser's local storage.</li>
                     <li>Blackjack pays 3 to 2.</li>
                     <li>Dealer must stand on 17.</li>
                     <li>If the dealer's first card is an ace you can take out insurance. Insurance is half your bet and pays 2 to 1.</li>
@@ -115,7 +118,8 @@
                         max="5000" 
                         class="chips-slider js-chips-slider">
                 </p>
-                <p>The settings take effect after starting a "New Game".</p>
+                <p>These two settings take effect after starting a "New game".</p>
+                <label>Remaining cards counter ON/OFF: <input type="checkbox" class="js-remaining-cards-on-off"></label>
                 <a href="#settings-button" class="button settings-ok-button js-settings-ok-button">Ok</a>
             </div>
         </section>

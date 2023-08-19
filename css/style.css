@@ -77,7 +77,7 @@ body {
     font-size: 30px;
 }
 
-.settings-button-container{
+.settings-button-container {
     position: absolute;
     left: 50px;
     top: 0;
@@ -85,6 +85,21 @@ body {
 
 .settings-button {
     font-size: 35px;
+}
+
+.remaining-cards-countainer {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    right: 50px;
+    top: 0;
+    height: 45px;
+    width: 45px;
+    border-radius: 10px;
+    border: 2px solid var(--font-color);
+    font-size: 10px;
 }
 
 legend {
@@ -336,6 +351,14 @@ legend {
     color: var(--hover-text);
 }
 
+.popup > label{
+    display: flex;
+}
+
+.popup > label > input{
+    margin: 0 auto;
+}
+
 .settings-ok-button {
     margin: 10px auto 0px auto;
 }
@@ -344,7 +367,7 @@ legend {
     line-height: 24px;
 }
 
-.settings-container input{
+.settings-container p > input{
     display: block;
     margin: 0 auto;
     width: 80%;
@@ -373,7 +396,15 @@ legend {
 
     .settings-button-container {
         left: 60px;
-        top: 0;
+    }
+
+    .remaining-cards-countainer { 
+        right: 60px;
+        height: 55px;
+        width: 55px;
+        border-radius: 10px;
+        border: 2px solid var(--font-color);
+        font-size: 12px;
     }
 
     .messages-container {

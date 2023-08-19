@@ -11,6 +11,7 @@ const splitPotContainer = document.querySelector(".js-split-pot-container");
 const playerCardsSum = document.querySelector(".js-player-cards-sum");
 const dealerCardsSum = document.querySelector(".js-dealer-cards-sum");
 const playerCardsSplitSum = document.querySelector(".js-player-cards-split-sum");
+const remainingCardsContainer = document.querySelector(".js-remaining-cards-container");
 
 const coin1Button = document.querySelector(".js-coin-1");
 const coin5Button = document.querySelector(".js-coin-5");
@@ -33,6 +34,7 @@ const deckSlider = document.querySelector(".js-deck-slider");
 const deckNumber = document.querySelector(".js-deck-number-value");
 const chipsSlider = document.querySelector(".js-chips-slider");
 const chipsValue = document.querySelector(".js-chips-value");
+const remainingCardsOnOff = document.querySelector(".js-remaining-cards-on-off");
 
 
 /*************************Events**************************/
@@ -70,10 +72,10 @@ let hideInsureButton
 let insurancePot;
 let splitRound;
 let firstStand;
+let remainingCards = 0;
 handleSettings();
 
 function initialize(playerChipsSum) {
-    deckId = null;
     playerCards = [];
     playerSplitCards =[];
     playerChips = playerChipsSum;
@@ -94,9 +96,20 @@ function initialize(playerChipsSum) {
 
 /*********************fetch deck(s)***********************/
 async function newDeck() {
-    const data = await fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${localStorage.getItem("deckNumber")}`)
-    const response = await data.json();
-    deckId = response.deck_id;
+    if (deckId === null) {
+        const data = await fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${localStorage.getItem("deckNumber")}`)
+        const response = await data.json();
+        deckId = response.deck_id;
+        remainingCards = response.remaining;
+    } else {
+        const data = await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}`)
+        const response = await data.json();
+        remainingCards = response.remaining;
+        if (remainingCards <=52) {
+            deckId = null;
+            await newDeck();
+        }
+    }
     let temp = await drawCards(deckId, 2);
     playerCards = temp.cards;
     temp = await drawCards(deckId, 2);
@@ -108,6 +121,7 @@ async function drawCards(deckId, cardsNumber) {
     if (deckId == null) return
     const data = await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${cardsNumber}`)
     const response = await data.json();
+    remainingCards -= cardsNumber;
     return response
 } 
 
@@ -122,6 +136,16 @@ function render() {
     renderPot();
     renderButtons();
     setTimeout(() => {renderMessages()}, 600);
+    renderRemainingCards();
+}
+
+function renderRemainingCards() {
+    if (localStorage.getItem("remainingCards") === "true") {
+        remainingCardsContainer.innerHTML = `<p>RMNG</p><p>Cards</p>${remainingCards}`;
+        remainingCardsContainer.classList.remove("hidden");
+        console.log(remainingCards)
+    } else remainingCardsContainer.classList.add("hidden");
+    
 }
 
 function renderMessages() {
@@ -381,6 +405,8 @@ async function handleSplit() {
 function handleSettingsOkButton() {
     localStorage.setItem("deckNumber", deckSlider.value);
     localStorage.setItem("chipsValue", chipsSlider.value);
+    localStorage.setItem("remainingCards", remainingCardsOnOff.checked);
+    render();
 }
 
 function handleSettings() {
@@ -400,6 +426,13 @@ function handleSettings() {
         chipsValue.innerText = $2500;
         chipsSlider.value = 2500;
     }
+    if (localStorage.getItem("remainingCards") != null) {
+        remainingCardsOnOff.checked = JSON.parse(localStorage.getItem("remainingCards"));
+    } else {
+        localStorage.setItem("remainingCards", false);
+        remainingCardsOnOff.checked = false;
+    }
+
 }
 
 /******************enable/disable buttons**********************/
@@ -491,5 +524,7 @@ function newHand() {
 }
 
 function newGame() {
+    deckId = null;
+    remainingCards = 0;
     initialize(localStorage.getItem("chipsValue"));
 }
