@@ -7,7 +7,7 @@ You can try it, here is the GitHub Pages [link](https://nagyryt.github.io/blackj
 
 - Default there are 6 decks in a hand, but you can set it between 1-8.
 - There will be new decks if the number of remaining cards is 52 or less (1 deck) or if you start a new game.
-- You can see remaining cards if you enable it in the setting. Default is disabled.
+- You can see remaining cards if you enable it in the settings. Default is disabled.
 - Default starting chips are $2500, but you can set it between $100 - $5000.
 - I store all three values in the browser's local storage.
 - Blackjack pays 3 to 2.

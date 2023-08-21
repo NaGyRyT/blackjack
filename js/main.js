@@ -143,7 +143,6 @@ function renderRemainingCards() {
     if (localStorage.getItem("remainingCards") === "true") {
         remainingCardsContainer.innerHTML = `<p>RMNG</p><p>Cards</p>${remainingCards}`;
         remainingCardsContainer.classList.remove("hidden");
-        console.log(remainingCards)
     } else remainingCardsContainer.classList.add("hidden");
     
 }
