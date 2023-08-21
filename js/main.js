@@ -395,7 +395,7 @@ async function handleSplit() {
     temp = temp.cards;
     playerSplitCards.push(temp[0]);
     message = "Left hand."
-    if (sumCardsValues(playerCards) === 21){
+    if (sumCardsValues(playerCards) === 21) {
         handleStand();
     }
     enableButtons();
